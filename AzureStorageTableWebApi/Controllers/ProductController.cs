@@ -1,5 +1,5 @@
-﻿using AzureStorageTableWebApi.Infrastructure.Entites;
-using AzureStorageTableWebApi.Infrastructure.Persistance.Interfaces;
+﻿using Azure.Data.Tables;
+using AzureStorageTableWebApi.Infrastructure.Entites;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureStorageTableWebApi.Controllers;
@@ -8,17 +8,30 @@ namespace AzureStorageTableWebApi.Controllers;
 [Route("api/[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly ITableStorageService _storageService;
+    private readonly IConfiguration _configuration;
+    private const string TableName = "Product";
 
-    public ProductController(ITableStorageService storageService)
+    public ProductController(IConfiguration configuration)
     {
-        _storageService = storageService;
+        _configuration = configuration;
+    }
+
+    private async Task<TableClient> GetTableClient()
+    {
+        var serviceClient = new TableServiceClient(_configuration.GetConnectionString("StorageConnectionString"));
+
+        var tableClient = serviceClient.GetTableClient(TableName);
+        await tableClient.CreateIfNotExistsAsync();
+        return tableClient;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAsync(string id)
     {
-        return Ok(await _storageService.GetEntityAsync(id));
+        var tableClient = await GetTableClient();
+
+        var product = await tableClient.GetEntityAsync<Product>("Product", id);
+        return Ok(product);
     }
 
     [HttpPost]
@@ -28,23 +41,32 @@ public class ProductController : ControllerBase
         product.Id = id;
         product.RowKey = id;
         product.PartitionKey = "Product";
-        var createdEntity = await _storageService.UpsertEntityAsync(product);
-        return Ok(createdEntity);
+
+        await UpsertProduct(product);
+        return Ok(product);
+    }
+
+    private async Task UpsertProduct(Product product)
+    {
+        var tableClient = await GetTableClient();
+        await tableClient.UpsertEntityAsync(product);
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutAsync([FromBody] Product entity)
+    public async Task<IActionResult> PutAsync([FromBody] Product product)
     {
-        entity.PartitionKey = "Product";
-        entity.RowKey = entity.Id;
-        var updateEntity = await _storageService.UpsertEntityAsync(entity);
-        return Ok(updateEntity);
+        product.PartitionKey = "Product";
+        product.RowKey = product.Id;
+
+        await UpsertProduct(product);
+        return Ok(product);
     }
 
     [HttpDelete]
     public async Task<IActionResult> DeleteAsync(string id)
     {
-        await _storageService.DeleteEntityAsync(id);
+        var tableClient = await GetTableClient();
+        await tableClient.DeleteEntityAsync("Product", id);
         return NoContent();
     }
 }
