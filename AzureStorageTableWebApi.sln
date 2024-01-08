@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageTableWebApi", "AzureStorageTableWebApi\AzureStorageTableWebApi.csproj", "{5B51D2C8-DFB8-4031-A25A-93C75314AD84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageTableWebApi.Infrastructure", "AzureStorageTableWebApi.Infrastructure\AzureStorageTableWebApi.Infrastructure.csproj", "{FB9423D4-510F-4E55-839C-54D436146A26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B51D2C8-DFB8-4031-A25A-93C75314AD84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B51D2C8-DFB8-4031-A25A-93C75314AD84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B51D2C8-DFB8-4031-A25A-93C75314AD84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B51D2C8-DFB8-4031-A25A-93C75314AD84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB9423D4-510F-4E55-839C-54D436146A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB9423D4-510F-4E55-839C-54D436146A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB9423D4-510F-4E55-839C-54D436146A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB9423D4-510F-4E55-839C-54D436146A26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
